@@ -1,4 +1,4 @@
-﻿package ma.helpdeskBackend.controllers;
+package ma.helpdeskBackend.controllers;
 
 import ma.helpdeskBackend.entities.Ticket;
 import ma.helpdeskBackend.services.TicketService;

@@ -1,4 +1,4 @@
-﻿package ma.helpdeskBackend.services;
+package ma.helpdeskBackend.services;
 
 import ma.helpdeskBackend.entities.Commentaire;
 import ma.helpdeskBackend.entities.Ticket;
