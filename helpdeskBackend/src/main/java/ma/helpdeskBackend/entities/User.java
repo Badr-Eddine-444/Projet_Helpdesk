@@ -22,8 +22,7 @@ public class User {
     private String email;
 
     @Column(nullable = false)
-    private String motDePasse;
-
+    private String password;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;

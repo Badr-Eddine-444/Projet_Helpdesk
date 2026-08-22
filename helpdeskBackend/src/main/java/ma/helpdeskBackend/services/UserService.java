@@ -2,14 +2,17 @@ package ma.helpdeskBackend.services;
 
 import ma.helpdeskBackend.entities.User;
 import ma.helpdeskBackend.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserService {
 
+public class UserService {
+    @Autowired
+    private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
     // Injection de dépendance : on connecte le Service au Repository
@@ -37,6 +40,9 @@ public class UserService {
      * MISSION 3 : Sauvegarder un nouvel utilisateur dans la base de données.
      */
     public User creerUtilisateur(User nouvelUtilisateur) {
+        // On crypte le mot de passe avant de le sauvegarder
+        nouvelUtilisateur.setPassword(passwordEncoder.encode(nouvelUtilisateur.getPassword()));
+
         // save() exécute la requête SQL "INSERT INTO utilisateurs..."
         return userRepository.save(nouvelUtilisateur);
     }
