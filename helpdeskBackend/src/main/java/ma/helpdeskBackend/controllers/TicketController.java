@@ -1,6 +1,10 @@
 package ma.helpdeskBackend.controllers;
 
 import ma.helpdeskBackend.entities.Ticket;
+import ma.helpdeskBackend.entities.User;
+import ma.helpdeskBackend.entities.StatutTicket;
+import ma.helpdeskBackend.repositories.TicketRepository;
+import ma.helpdeskBackend.repositories.UserRepository;
 import ma.helpdeskBackend.services.TicketService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +18,14 @@ import java.util.List;
 public class TicketController {
 
     private final TicketService ticketService;
+    private final TicketRepository ticketRepository;
+    private final UserRepository userRepository;
 
-    // Injection via le constructeur (sans @Autowired)
-    public TicketController(TicketService ticketService) {
+    // Injection propre via le constructeur pour tous les services et repositories
+    public TicketController(TicketService ticketService, TicketRepository ticketRepository, UserRepository userRepository) {
         this.ticketService = ticketService;
+        this.ticketRepository = ticketRepository;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -33,9 +41,6 @@ public class TicketController {
     /**
      * POST /api/tickets?createurId={id}
      * Cree un nouveau ticket pour l'utilisateur dont l'ID est passe en parametre.
-     *
-     * @param ticket      Le corps de la requete JSON contenant les infos du ticket
-     * @param createurId  L'identifiant de l'utilisateur createur (passe en query param)
      */
     @PostMapping
     public ResponseEntity<Ticket> creerTicket(
@@ -48,12 +53,35 @@ public class TicketController {
     /**
      * DELETE /api/tickets/{id}
      * Supprime le ticket correspondant a l'ID fourni.
-     *
-     * @param id L'identifiant du ticket a supprimer
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> supprimerTicket(@PathVariable Long id) {
         ticketService.supprimerTicket(id);
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * PUT /api/tickets/{id}/assigner?technicienId={id}
+     * Assigne un technicien a un ticket spécifique.
+     */
+    @PutMapping("/{id}/assigner")
+    public ResponseEntity<Ticket> assignerTechnicien(@PathVariable Long id, @RequestParam Long technicienId) {
+        Ticket ticket = ticketRepository.findById(id).orElseThrow();
+        User technicien = userRepository.findById(technicienId).orElseThrow();
+
+        ticket.setTechnicien(technicien);
+        ticket.setStatut(StatutTicket.ASSIGNED);
+        return ResponseEntity.ok(ticketRepository.save(ticket));
+    }
+
+    /**
+     * PUT /api/tickets/{id}/statut?statut={STATUT}
+     * Change le statut d'un ticket.
+     */
+    @PutMapping("/{id}/statut")
+    public ResponseEntity<Ticket> changerStatut(@PathVariable Long id, @RequestParam StatutTicket statut) {
+        Ticket ticket = ticketRepository.findById(id).orElseThrow();
+        ticket.setStatut(statut);
+        return ResponseEntity.ok(ticketRepository.save(ticket));
     }
 }
