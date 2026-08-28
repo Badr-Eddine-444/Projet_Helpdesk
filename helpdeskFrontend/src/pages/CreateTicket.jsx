@@ -6,12 +6,15 @@ import './CreateTicket.css';
 const INITIAL_FORM = {
   titre: '',
   description: '',
-  priorite: 'MOYENNE',
-  statut: 'OUVERT',
+  priorite: 'MEDIUM',  // Enum Java : LOW | MEDIUM | HIGH
+  statut: 'NEW',       // Enum Java : NEW | ASSIGNED | IN_PROGRESS | RESOLVED | CLOSED
 };
 
 const CreateTicket = () => {
   const navigate = useNavigate();
+
+  // ── Identifiant de l'utilisateur connecté (issu du JWT stocké) ──────────
+  const currentUserId = Number(localStorage.getItem('id'));
   const [form, setForm] = useState(INITIAL_FORM);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -31,14 +34,19 @@ const CreateTicket = () => {
     setLoading(true);
     setError(null);
     try {
-      await createTicket({ ...form, createurId: 1 });
+      // Structure imbriquée attendue par l'entité JPA côté Spring Boot
+      await createTicket({
+        ...form,
+        utilisateur: { id: currentUserId },
+      });
       setSuccess(true);
       setForm(INITIAL_FORM);
       setTimeout(() => navigate('/'), 1500);
     } catch (err) {
       setError(
         err.response?.data?.message ||
-        'Erreur lors de la création du ticket. Vérifiez que le backend est démarré.'
+        err.message ||
+        'Erreur inattendue lors de la création du ticket.'
       );
       console.error(err);
     } finally {
@@ -125,9 +133,10 @@ const CreateTicket = () => {
                   onChange={handleChange}
                   className="form-input form-select"
                 >
-                  <option value="HAUTE">🔴 Haute</option>
-                  <option value="MOYENNE">🟡 Moyenne</option>
-                  <option value="BASSE">🟢 Basse</option>
+                  {/* Valeurs = Enum Java Priorite */}
+                  <option value="HIGH">🔴 Haute</option>
+                  <option value="MEDIUM">🟡 Moyenne</option>
+                  <option value="LOW">🟢 Basse</option>
                 </select>
               </div>
             </div>
@@ -142,10 +151,12 @@ const CreateTicket = () => {
                   onChange={handleChange}
                   className="form-input form-select"
                 >
-                  <option value="OUVERT">Ouvert</option>
-                  <option value="EN_COURS">En cours</option>
-                  <option value="RESOLU">Résolu</option>
-                  <option value="FERME">Fermé</option>
+                  {/* Valeurs = Enum Java StatutTicket */}
+                  <option value="NEW">Nouveau</option>
+                  <option value="ASSIGNED">Assigné</option>
+                  <option value="IN_PROGRESS">En cours</option>
+                  <option value="RESOLVED">Résolu</option>
+                  <option value="CLOSED">Fermé</option>
                 </select>
               </div>
             </div>
@@ -156,7 +167,7 @@ const CreateTicket = () => {
               <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
               <path d="M12 16v-4m0-4h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
             </svg>
-            <span>Le ticket sera automatiquement assigné à l'utilisateur <strong>#1</strong> (Admin).</span>
+            <span>Le ticket sera créé et associé à votre compte (ID&nbsp;<strong>#{currentUserId}</strong>).</span>
           </div>
 
           <div className="form-actions">

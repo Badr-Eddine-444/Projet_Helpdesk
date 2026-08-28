@@ -329,3 +329,91 @@
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+/* ── Inline select (statut & technicien dans le tableau) ─────────────────── */
+.inline-select {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.3rem 1.8rem 0.3rem 0.6rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  outline: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%236b7280' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 8px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+  max-width: 150px;
+}
+
+.inline-select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+/* Couleurs par statut (hérite des classes badge mais adaptées au select) */
+.status-select.status-open     { background-color: rgba(234, 179, 8, 0.1);  color: #ca8a04; }
+.status-select.status-progress { background-color: rgba(59, 130, 246, 0.1); color: #2563eb; }
+.status-select.status-resolved { background-color: rgba(34, 197, 94, 0.1);  color: #16a34a; }
+.status-select.status-closed   { background-color: rgba(100, 116, 139, 0.1); color: #64748b; }
+
+/* Select technicien */
+.tech-select {
+  background-color: var(--surface);
+  color: var(--text-primary);
+  max-width: 180px;
+}
+
+/* ── Toast notification ──────────────────────────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  animation: toastIn 0.3s ease;
+  max-width: 380px;
+}
+
+.toast-success {
+  background: #166534;
+  color: #bbf7d0;
+  border: 1px solid #15803d;
+}
+
+.toast-error {
+  background: #7f1d1d;
+  color: #fecaca;
+  border: 1px solid #991b1b;
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 0.9rem;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.toast-close:hover { opacity: 1; }
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

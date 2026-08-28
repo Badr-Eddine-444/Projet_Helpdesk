@@ -25,7 +25,11 @@ export const login = (credentials) => api.post('/auth/login', credentials);
 
 // ── Tickets ──────────────────────────────────────────────
 export const getTickets    = ()       => api.get('/tickets');
-export const createTicket  = (data)   => api.post('/tickets', data);
+export const createTicket  = (data)   => {
+  // Le contrôleur Spring Boot attend createurId en @RequestParam (query string)
+  const createurId = localStorage.getItem('id');
+  return api.post(`/tickets?createurId=${createurId}`, data);
+};
 export const deleteTicket  = (id)     => api.delete(`/tickets/${id}`);
 
 // ── Users ────────────────────────────────────────────────

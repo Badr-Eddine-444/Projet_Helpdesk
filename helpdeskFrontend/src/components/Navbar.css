@@ -12,6 +12,7 @@
   box-shadow: 0 1px 20px rgba(0, 0, 0, 0.15);
 }
 
+/* ── Brand ────────────────────────────────────────────────────────────── */
 .navbar-brand {
   display: flex;
   align-items: center;
@@ -43,6 +44,7 @@
   text-transform: uppercase;
 }
 
+/* ── Navigation links ─────────────────────────────────────────────────── */
 .navbar-links {
   display: flex;
   list-style: none;
@@ -79,13 +81,29 @@
   color: var(--primary);
 }
 
+/* ── Profil wrapper (position relative pour le dropdown) ──────────────── */
+.navbar-user-wrapper {
+  position: relative;
+}
+
+/* ── Zone cliquable du profil ─────────────────────────────────────────── */
 .navbar-user {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   cursor: pointer;
+  padding: 0.35rem 0.6rem;
+  border-radius: 10px;
+  transition: background 0.2s ease;
+  user-select: none;
 }
 
+.navbar-user:hover,
+.navbar-user.open {
+  background: var(--hover-bg);
+}
+
+/* ── Avatar ───────────────────────────────────────────────────────────── */
 .user-avatar {
   width: 36px;
   height: 36px;
@@ -100,6 +118,7 @@
   flex-shrink: 0;
 }
 
+/* ── Infos texte ──────────────────────────────────────────────────────── */
 .user-info {
   display: flex;
   flex-direction: column;
@@ -115,4 +134,89 @@
 .user-role {
   font-size: 0.7rem;
   color: var(--text-muted);
+}
+
+/* ── Chevron ──────────────────────────────────────────────────────────── */
+.profile-chevron {
+  width: 14px;
+  height: 14px;
+  color: var(--text-muted);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.profile-chevron.rotated {
+  transform: rotate(180deg);
+}
+
+/* ── Dropdown ─────────────────────────────────────────────────────────── */
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 210px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  padding: 0.4rem;
+  z-index: 200;
+  animation: dropdownFadeIn 0.15s ease;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease;
+}
+
+.dropdown-item svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  color: var(--text-secondary);
+}
+
+.dropdown-item:hover {
+  background: var(--hover-bg);
+}
+
+.dropdown-item.danger {
+  color: #f87171;
+}
+
+.dropdown-item.danger svg {
+  color: #f87171;
+}
+
+.dropdown-item.danger:hover {
+  background: rgba(248, 113, 113, 0.1);
+}
+
+.dropdown-separator {
+  height: 1px;
+  background: var(--border);
+  margin: 0.3rem 0.4rem;
 }

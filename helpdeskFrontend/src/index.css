@@ -48,6 +48,23 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* ── Light Theme Override ──────────────────────────────────────────────────── */
+body.light-theme {
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --surface-raised: #f0f2f8;
+  --border: rgba(0, 0, 0, 0.08);
+  --hover-bg: rgba(0, 0, 0, 0.04);
+
+  --text-primary: #1a1d2e;
+  --text-secondary: #4a5068;
+  --text-muted: #8891a8;
+
+  --input-bg: #f0f2f8;
+
+  color-scheme: light;
+}
+
 #root {
   min-height: 100vh;
   display: flex;

@@ -8,6 +8,10 @@
     <title>HelpDesk Pro</title>
   </head>
   <body>
+    <!-- Restaure le thème sauvegardé AVANT le rendu pour éviter le flash -->
+    <script>
+      if (localStorage.getItem('theme') === 'light') document.body.classList.add('light-theme');
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

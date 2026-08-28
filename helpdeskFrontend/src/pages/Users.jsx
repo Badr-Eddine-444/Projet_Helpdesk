@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { getUsers, createUser, deleteUser } from '../services/api';
 import './Users.css';
 
-const ROLES = ['USER', 'TECHNICIEN', 'ADMIN'];
+const ROLES = ['USER', 'SUPPORT', 'ADMIN'];
 
 const AVATAR_COLORS = [
   '#6366f1', '#3b82f6', '#8b5cf6', '#ec4899', '#14b8a6', '#f59e0b', '#ef4444',
@@ -10,7 +10,7 @@ const AVATAR_COLORS = [
 
 const ROLE_BADGE = {
   ADMIN:      { label: 'Admin',      color: '#ec4899' },
-  TECHNICIEN: { label: 'Technicien', color: '#3b82f6' },
+  SUPPORT:    { label: 'Technicien', color: '#3b82f6' },
   USER:       { label: 'Employé',    color: '#14b8a6' },
 };
 
