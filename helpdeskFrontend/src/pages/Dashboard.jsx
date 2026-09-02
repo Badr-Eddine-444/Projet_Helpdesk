@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getTickets, getUsers, deleteTicket } from '../services/api';
 import api from '../services/api';
 import './Dashboard.css';
@@ -38,6 +38,8 @@ const Toast = ({ message, type, onClose }) => (
 );
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+
   // ── RBAC : lecture du rôle et de l'ID depuis le localStorage ──────────────
   const role          = localStorage.getItem('role') ?? '';
   const currentUserId = Number(localStorage.getItem('id'));
@@ -107,7 +109,7 @@ const Dashboard = () => {
   // ── Changement de statut ──────────────────────────────────────────────────
   const handleStatutChange = async (ticketId, newStatut) => {
     try {
-      await api.put(`/tickets/${ticketId}/statut?statut=${newStatut}`);
+      await api.put(`/tickets/${ticketId}/statut?statut=${newStatut}&userId=${currentUserId}`);
       // Mise à jour optimiste du state local (évite un rechargement complet)
       setTickets((prev) =>
         prev.map((t) => (t.id === ticketId ? { ...t, statut: newStatut } : t))
@@ -351,7 +353,7 @@ const Dashboard = () => {
                 const sConf = STATUS_CONFIG[ticket.statut]   || { label: ticket.statut,   class: '' };
 
                 return (
-                  <tr key={ticket.id}>
+                  <tr key={ticket.id} onClick={() => navigate(`/tickets/${ticket.id}`)} style={{ cursor: 'pointer' }}>
                     {/* ID */}
                     <td className="ticket-id">#{ticket.id}</td>
 
@@ -367,7 +369,7 @@ const Dashboard = () => {
                     </td>
 
                     {/* Statut : select interactif si ADMIN, ou SUPPORT assigné au ticket */}
-                    <td>
+                    <td onClick={(e) => e.stopPropagation()}>
                       {(isAdmin || (isSupport && Number(ticket.technicien?.id) === currentUserId)) ? (
                         <select
                           id={`statut-select-${ticket.id}`}
@@ -392,7 +394,7 @@ const Dashboard = () => {
 
                     {/* Assignation technicien : visible seulement pour ADMIN */}
                     {isAdmin && (
-                      <td>
+                      <td onClick={(e) => e.stopPropagation()}>
                         <select
                           id={`tech-select-${ticket.id}`}
                           className="inline-select tech-select"
@@ -412,7 +414,7 @@ const Dashboard = () => {
 
                     {/* Actions : suppression réservée à ADMIN */}
                     {isAdmin && (
-                      <td>
+                      <td onClick={(e) => e.stopPropagation()}>
                         <button
                           id={`delete-ticket-${ticket.id}`}
                           className="btn-icon btn-danger-icon"

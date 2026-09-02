@@ -3,6 +3,7 @@ import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
 import Dashboard from './pages/Dashboard';
 import CreateTicket from './pages/CreateTicket';
+import TicketDetails from './pages/TicketDetails';
 import Users from './pages/Users';
 import Login from './pages/Login';
 
@@ -22,10 +23,11 @@ function App() {
                 <Navbar />
                 <main className="app-main">
                   <Routes>
-                    <Route index                   element={<Dashboard />}    />
-                    <Route path="/"                element={<Dashboard />}    />
-                    <Route path="/create-ticket"   element={<CreateTicket />} />
-                    <Route path="/users"           element={<Users />}        />
+                    <Route index                   element={<Dashboard />}      />
+                    <Route path="/"                element={<Dashboard />}      />
+                    <Route path="/create-ticket"   element={<CreateTicket />}   />
+                    <Route path="/tickets/:id"     element={<TicketDetails />}  />
+                    <Route path="/users"           element={<Users />}          />
                     {/* Route inconnue → Dashboard */}
                     <Route path="*"               element={<Navigate to="/" replace />} />
                   </Routes>
