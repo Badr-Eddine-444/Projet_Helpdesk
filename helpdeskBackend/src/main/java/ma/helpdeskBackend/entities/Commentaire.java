@@ -1,5 +1,6 @@
 package ma.helpdeskBackend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -25,11 +26,13 @@ public class Commentaire {
     // Le ticket sur lequel le commentaire est posté
     @ManyToOne
     @JoinColumn(name = "ticket_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Ticket ticket;
 
     // La personne qui a écrit le commentaire
     @ManyToOne
     @JoinColumn(name = "auteur_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "password"})
     private User auteur;
 
     @PrePersist

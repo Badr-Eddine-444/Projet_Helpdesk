@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/commentaires")
 @CrossOrigin("*")
 public class CommentaireController {
 
@@ -24,37 +23,39 @@ public class CommentaireController {
      * GET /api/commentaires
      * Recupere tous les commentaires (tous tickets confondus).
      */
-    @GetMapping
+    @GetMapping("/api/commentaires")
     public ResponseEntity<List<Commentaire>> getAllCommentaires() {
         List<Commentaire> commentaires = commentaireService.getAllCommentaires();
         return ResponseEntity.ok(commentaires);
     }
 
     /**
-     * GET /api/commentaires/ticket/{ticketId}
+     * GET /api/tickets/{ticketId}/commentaires
      * Recupere tous les commentaires associes a un ticket precis.
+     * Route conforme au cahier des charges (nestée sous /tickets).
      *
      * @param ticketId L'identifiant du ticket dont on veut l'historique de commentaires
      */
-    @GetMapping("/ticket/{ticketId}")
+    @GetMapping("/api/tickets/{ticketId}/commentaires")
     public ResponseEntity<List<Commentaire>> getCommentairesByTicket(@PathVariable Long ticketId) {
         List<Commentaire> commentaires = commentaireService.getCommentairesByTicket(ticketId);
         return ResponseEntity.ok(commentaires);
     }
 
     /**
-     * POST /api/commentaires?ticketId={id}&auteurId={id}
+     * POST /api/tickets/{ticketId}/commentaires?auteurId={id}
      * Ajoute un nouveau commentaire sur un ticket.
+     * Route conforme au cahier des charges (nestée sous /tickets).
      *
-     * @param commentaire Le corps de la requete JSON avec le texte du commentaire
      * @param ticketId    L'identifiant du ticket cible
      * @param auteurId    L'identifiant de l'utilisateur qui poste le commentaire
+     * @param commentaire Le corps de la requete JSON avec le texte du commentaire
      */
-    @PostMapping
+    @PostMapping("/api/tickets/{ticketId}/commentaires")
     public ResponseEntity<Commentaire> ajouterCommentaire(
-            @RequestBody Commentaire commentaire,
-            @RequestParam Long ticketId,
-            @RequestParam Long auteurId) {
+            @PathVariable Long ticketId,
+            @RequestParam Long auteurId,
+            @RequestBody Commentaire commentaire) {
         Commentaire nouveauCommentaire = commentaireService.ajouterCommentaire(commentaire, ticketId, auteurId);
         return ResponseEntity.status(HttpStatus.CREATED).body(nouveauCommentaire);
     }
@@ -65,7 +66,7 @@ public class CommentaireController {
      *
      * @param id L'identifiant du commentaire a supprimer
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/api/commentaires/{id}")
     public ResponseEntity<Void> supprimerCommentaire(@PathVariable Long id) {
         commentaireService.supprimerCommentaire(id);
         return ResponseEntity.noContent().build();
